@@ -2,21 +2,6 @@
 {
     public class ApiRestService : IApiRest
     {
-        private static List<ApiRestClass> results = new List<ApiRestClass>()
-        {
-            new ApiRestClass{Id= 1,
-                Name="Spider Man",
-                FirstName="Peter",
-                LastName="Parker",
-                PlaceName="New York City"
-            },
-            new ApiRestClass{Id= 2,
-                Name="Iron Man",
-                FirstName="Tony",
-                LastName="Stark",
-                PlaceName="Malibu City"
-            }
-        };
         private readonly DataContext _context;
         public ApiRestService(DataContext context)
         {
@@ -27,7 +12,7 @@
         {
             _context.MyData.Add(data);
             await _context.SaveChangesAsync();
-            return results;
+            return await _context.MyData.ToListAsync();
         }
 
         public async Task<List<ApiRestClass>?> DeleteResult(int id)
@@ -39,7 +24,7 @@
             _context.MyData.Remove(single);
             await _context.SaveChangesAsync();
 
-            return results;
+            return await _context.MyData.ToListAsync();
         }
 
         public async Task<List<ApiRestClass>> GetAllResults()
@@ -68,7 +53,7 @@
 
             await _context.SaveChangesAsync();
 
-            return results;
+            return await _context.MyData.ToListAsync();
         }
     }
 }
