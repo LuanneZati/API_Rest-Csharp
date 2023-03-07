@@ -17,46 +17,56 @@
                 PlaceName="Malibu City"
             }
         };
-
-        public List<ApiRestClass> AddData(ApiRestClass data)
+        private readonly DataContext _context;
+        public ApiRestService(DataContext context)
         {
-            results.Add(data);
+            _context = context;
+        }
+
+        public async Task<List<ApiRestClass>?> AddData(ApiRestClass data)
+        {
+            _context.MyData.Add(data);
+            await _context.SaveChangesAsync();
             return results;
         }
 
-        public List<ApiRestClass>? DeleteResult(int id)
+        public async Task<List<ApiRestClass>?> DeleteResult(int id)
         {
-            var single = results.Find(x => x.Id == id);
+            var single = await _context.MyData.FindAsync(id);
             if (single == null)
                 return null;
 
-            results.Remove(single);
+            _context.MyData.Remove(single);
+            await _context.SaveChangesAsync();
 
             return results;
         }
 
-        public List<ApiRestClass> GetAllResults()
+        public async Task<List<ApiRestClass>> GetAllResults()
         {
-            return results;
+            var data = await _context.MyData.ToListAsync();
+            return data;
         }
 
-        public ApiRestClass? GetSingleResult(int id)
+        public async Task<ApiRestClass?> GetSingleResult(int id)
         {
-            var single = results.Find(x => x.Id == id);
+            var single = await _context.MyData.FindAsync(id);
             if (single == null)
                 return null;
             return single;
         }
 
-        public List<ApiRestClass>? UpdateResult(int id, ApiRestClass request)
+        public async Task<List<ApiRestClass>?> UpdateResult(int id, ApiRestClass request)
         {
-            var single = results.Find(x => x.Id == id);
+            var single = await _context.MyData.FindAsync(id);
             if (single == null)
                 return null;
             single.FirstName = request.FirstName;
             single.LastName = request.LastName;
             single.PlaceName = request.PlaceName;
             single.Name = request.Name;
+
+            await _context.SaveChangesAsync();
 
             return results;
         }

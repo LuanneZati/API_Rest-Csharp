@@ -18,13 +18,13 @@ namespace API_Rest.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ApiRestClass>>> GetAllResults()
         {
-            return _apiRestService.GetAllResults();
+            return await _apiRestService.GetAllResults();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ApiRestClass>> GetSingleResult(int id)
         {
-            var result = _apiRestService.GetSingleResult(id);
+            var result = await _apiRestService.GetSingleResult(id);
             if (result == null)
                 return NotFound("Not found!");
             return Ok(result);
@@ -33,7 +33,7 @@ namespace API_Rest.Controllers
         [HttpPost]
         public async Task<ActionResult<List<ApiRestClass>>> AddData(ApiRestClass data)
         {
-            var result = _apiRestService.AddData(data);
+            var result = await _apiRestService.AddData(data);
             if (result == null)
                 return NotFound("Not found!");
             return Ok(result);
@@ -42,7 +42,7 @@ namespace API_Rest.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<List<ApiRestClass>>> UpdateResult(int id, ApiRestClass request)
         {
-            var result = _apiRestService.UpdateResult(id, request);
+            var result = await _apiRestService.UpdateResult(id, request);
             if (result == null)
                 return NotFound("Not found!");
             return Ok(result);
@@ -51,7 +51,7 @@ namespace API_Rest.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<ApiRestClass>>> DeleteResult(int id)
         {
-            var result = _apiRestService.DeleteResult(id);
+            var result = await _apiRestService.DeleteResult(id);
             if (result == null)
                 return NotFound("Not found!");
             return Ok(result);

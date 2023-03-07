@@ -1,4 +1,5 @@
 global using API_Rest.Models;
+global using API_Rest.Data;
 using API_Rest.Services.ApiRest;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IApiRest, ApiRestService>();
-
+builder.Services.AddDbContext<DataContext>();
 
 var app = builder.Build();
 
