@@ -1,6 +1,8 @@
 ﻿using API_Rest.Models;
+using API_Rest.Services.ApiRest;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace API_Rest.Controllers
 {
@@ -8,66 +10,51 @@ namespace API_Rest.Controllers
     [ApiController]
     public class ApiRestController : ControllerBase
     {
-        private static List<ApiRest> results = new List<ApiRest>()
+        private readonly IApiRest _apiRestService;
+        public ApiRestController(IApiRest apiRestService)
         {
-            new ApiRest{Id= 1,
-                Name="Spider Man",
-                FirstName="Peter",
-                LastName="Parker",
-                PlaceName="New York City"
-            },
-            new ApiRest{Id= 2,
-                Name="Iron Man",
-                FirstName="Tony",
-                LastName="Stark",
-                PlaceName="Malibu City"
-            }
-        };
+            _apiRestService = apiRestService;
+        }
         [HttpGet]
-        public async Task<ActionResult<List<ApiRest>>> GetAllResults()
+        public async Task<ActionResult<List<ApiRestClass>>> GetAllResults()
         {
-            return Ok(results);
+            return _apiRestService.GetAllResults();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApiRest>> GetSingleResult(int id)
+        public async Task<ActionResult<ApiRestClass>> GetSingleResult(int id)
         {
-            var single = results.Find(x => x.Id == id);
-            if (single == null)
-                return NotFound("Sorry, this doesn't exist!");
-            return Ok(single);
+            var result = _apiRestService.GetSingleResult(id);
+            if (result == null)
+                return NotFound("Not found!");
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<ApiRest>>> AddData(ApiRest data)
+        public async Task<ActionResult<List<ApiRestClass>>> AddData(ApiRestClass data)
         {
-            results.Add(data);
-            return Ok(results);
+            var result = _apiRestService.AddData(data);
+            if (result == null)
+                return NotFound("Not found!");
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<ApiRest>>> UpdateResult(int id, ApiRest request)
+        public async Task<ActionResult<List<ApiRestClass>>> UpdateResult(int id, ApiRestClass request)
         {
-            var single = results.Find(x => x.Id == id);
-            if (single == null)
-                return NotFound("Sorry, this doesn't exist!");
-            single.FirstName = request.FirstName;
-            single.LastName = request.LastName;
-            single.PlaceName = request.PlaceName;
-            single.Name =  request.Name; 
-
-            return Ok(results);
+            var result = _apiRestService.UpdateResult(id, request);
+            if (result == null)
+                return NotFound("Not found!");
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<ApiRest>>> DeleteResult(int id)
+        public async Task<ActionResult<List<ApiRestClass>>> DeleteResult(int id)
         {
-            var single = results.Find(x => x.Id == id);
-            if (single == null)
-                return NotFound("Sorry, this doesn't exist!");
-            results.Remove(single);
-
-            return Ok(results);
+            var result = _apiRestService.DeleteResult(id);
+            if (result == null)
+                return NotFound("Not found!");
+            return Ok(result);
         }
     }
 }
